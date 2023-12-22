@@ -26,7 +26,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
 
 @Service
 @Log4j2
@@ -46,9 +45,10 @@ public class PdfService {
 
     private final AmazonS3Client amazonS3Client;
 
-    public void register(RegisterPdf registerPdf) {
+    public Long register(RegisterPdf registerPdf) {
         Pdf pdf = new Pdf(registerPdf.getName(), registerPdf.getUrl());
         pdfRepository.save(pdf);
+        return pdf.getId();
     }
 
     public void makePdfToText(PdfToText pdfToText) throws IOException, ApiException, MessagingException {
@@ -56,7 +56,7 @@ public class PdfService {
         if(pdf == null) throw new RuntimeException("ID에 해당하는 PDF를 찾을 수 없음");
 
         String pdfS3Name = s3Service.parseFileName(pdf.getUrl());
-
+        log.info("pdfS3Nmae: {}", pdfS3Name);
         useApi(pdfS3Name);
     }
 
@@ -67,9 +67,13 @@ public class PdfService {
     }
 
     public void useApi(String pdfName) throws IOException, MessagingException, ApiException {
-        ApiClient apiClient = new ApiClient(clientId, clientSecret, null);
+        log.info("useApi 함수 호출");
+        String baseUrl = "https://api.aspose.cloud/v4.0/words/convert?format=txt";
+
+        ApiClient apiClient = new ApiClient(clientId, clientSecret, baseUrl);
+        log.info("0. client 생성 성공");
         WordsApi wordsApi = new WordsApi(apiClient);
-        log.info("1. client 생성 성공");
+        log.info("1. api 요청 생성 성공");
 
         // pdf 이름으로 S3에서 Object 가져오기
         S3Object s3Object = amazonS3Client.getObject(bucket, pdfName);
@@ -90,8 +94,10 @@ public class PdfService {
 
         byte[] doc = Files.readAllBytes(Paths.get("test.pdf").toAbsolutePath());
         ConvertDocumentRequest request = new ConvertDocumentRequest(
-                doc, "txt", null, null, null, null, null, null, null);
+                doc, "txt", "/files/txt/", null, null, null, null, null, null);
         byte[] convert = wordsApi.convertDocument(request);
+        log.info("convert: {}", convert);
+
 
         log.info("5. API 요청 성공");
 

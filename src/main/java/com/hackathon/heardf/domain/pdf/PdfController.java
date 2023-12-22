@@ -39,9 +39,8 @@ public class PdfController {
      */
     @Operation(summary = "PDF 등록")
     @PostMapping("/pdfs")
-    public ResponseEntity<Integer> registerPdf(@RequestBody RegisterPdf registerPdf) {
-        pdfService.register(registerPdf);
-        return ResponseEntity.ok(200);
+    public ResponseEntity<Long> registerPdf(@RequestBody RegisterPdf registerPdf) {
+        return ResponseEntity.ok(pdfService.register(registerPdf));
     }
 
     /**
