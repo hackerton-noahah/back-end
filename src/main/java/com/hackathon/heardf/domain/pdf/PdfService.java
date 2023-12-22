@@ -6,6 +6,7 @@ import com.amazonaws.util.IOUtils;
 import com.aspose.words.cloud.*;
 import com.aspose.words.cloud.api.WordsApi;
 import com.aspose.words.cloud.model.requests.ConvertDocumentRequest;
+import com.hackathon.heardf.domain.pdf.dto.PdfRequestDto.RegisterPdf;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -39,7 +40,12 @@ public class PdfService {
 
     private final AmazonS3Client amazonS3Client;
 
-    void useApi(String pdfName) throws IOException, ApiException {
+    public void register(RegisterPdf registerPdf) {
+        Pdf pdf = new Pdf(registerPdf.getName(), registerPdf.getUrl());
+        pdfRepository.save(pdf);
+    }
+
+    public void useApi(String pdfName) throws IOException, ApiException {
         ApiClient apiClient = new ApiClient(clientId, clientSecret, null);
         WordsApi wordsApi = new WordsApi(apiClient);
         log.info("1. client 생성 성공");
