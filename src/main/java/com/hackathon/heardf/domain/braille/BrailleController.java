@@ -17,7 +17,7 @@ public class BrailleController {
     private final BrailleService brailleService;
 
     /**
-     * TODO: [POST] TEXT -> 점자 변환하기 (GPT 이용)
+     * [POST] TEXT -> 점자 변환하기 (GPT 이용)
      */
     @Operation(summary = "TEXT -> 점자 변환하기")
     @PostMapping("/brailles")
@@ -25,7 +25,4 @@ public class BrailleController {
         return ResponseEntity.ok(brailleService.registerBraille(textToBraille));
     }
 
-    /**
-     * TODO: [GET] 점자 조회하기
-     */
 }
