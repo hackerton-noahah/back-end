@@ -1,6 +1,11 @@
 package com.hackathon.heardf.domain.pdf;
 
-import com.aspose.words.*;
+import com.aspose.words.cloud.*;
+import com.aspose.words.cloud.api.WordsApi;
+import com.aspose.words.cloud.model.requests.ConvertDocumentRequest;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -17,13 +22,13 @@ public class PdfService {
     private String clientSecret;
 
 
-    /**
-    ApiClient apiClient = new ApiClient("clientId, clientSecret, null);
-    WordsApi wordsApi = new WordsApi(apiClient);
+    void useApi() throws IOException, ApiException {
+        ApiClient apiClient = new ApiClient(clientId, clientSecret, null);
+        WordsApi wordsApi = new WordsApi(apiClient);
 
-    byte[] doc = Files.readAllBytes(Paths.get("test.pdf").toAbsolutePath());
-    ConvertDocumentRequest request = new ConvertDocumentRequest(
-            doc, "txt", null, null, null, null);
-    ConvertDocument convert = wordsApi.convertDocument(request);
-     */
+        byte[] doc = Files.readAllBytes(Paths.get("test.pdf").toAbsolutePath());
+        ConvertDocumentRequest request = new ConvertDocumentRequest(
+                doc, "txt", null, null, null, null, null, null, null);
+        ConvertDocument convert = wordsApi.convertDocument(request);
+    }
 }

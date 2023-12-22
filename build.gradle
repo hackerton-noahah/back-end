@@ -30,6 +30,11 @@ dependencies {
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 
+	// vision
+	implementation 'com.luhuiguo:aspose-words:23.1'
+	implementation files('build/libs/aspose-words-cloud-23.12.0.jar')
+
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
