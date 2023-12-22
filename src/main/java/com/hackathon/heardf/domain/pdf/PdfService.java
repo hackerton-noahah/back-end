@@ -6,7 +6,10 @@ import com.amazonaws.util.IOUtils;
 import com.aspose.words.cloud.*;
 import com.aspose.words.cloud.api.WordsApi;
 import com.aspose.words.cloud.model.requests.ConvertDocumentRequest;
+import com.hackathon.heardf.domain.pdf.dto.PdfRequestDto.PdfToText;
 import com.hackathon.heardf.domain.pdf.dto.PdfRequestDto.RegisterPdf;
+import com.hackathon.heardf.domain.pdf.dto.PdfResponseDto.TextResult;
+import com.hackathon.heardf.global.s3.S3Service;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -31,6 +34,8 @@ public class PdfService {
 
     private final PdfRepository pdfRepository;
 
+    private final S3Service s3Service;
+
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
     @Value("${aspose.client-id}")
@@ -43,6 +48,21 @@ public class PdfService {
     public void register(RegisterPdf registerPdf) {
         Pdf pdf = new Pdf(registerPdf.getName(), registerPdf.getUrl());
         pdfRepository.save(pdf);
+    }
+
+    public void makePdfToText(PdfToText pdfToText) throws IOException, ApiException {
+        Pdf pdf = pdfRepository.findById(pdfToText.getId()).orElse(null);
+        if(pdf == null) throw new RuntimeException("ID에 해당하는 PDF를 찾을 수 없음");
+
+        String pdfS3Name = s3Service.parseFileName(pdf.getUrl());
+
+        useApi(pdfS3Name);
+    }
+
+    public TextResult getPdfToText(Long id) {
+        //TODO: pdf id에 해당하는 text 파일을 읽어와서 String을 임시 내용 대신 넣어주면 됨
+        log.info("pdf id: {}", id);
+        return new TextResult("임시 내용");
     }
 
     public void useApi(String pdfName) throws IOException, ApiException {

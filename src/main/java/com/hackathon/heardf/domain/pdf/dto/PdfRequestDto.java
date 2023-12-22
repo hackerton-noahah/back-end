@@ -13,4 +13,11 @@ public class PdfRequestDto {
         private String name;
         private String url;
     }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class PdfToText {
+        private Long id;
+    }
 }

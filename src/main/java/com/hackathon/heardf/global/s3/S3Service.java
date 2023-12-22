@@ -71,8 +71,8 @@ public class S3Service {
         return new S3Result(s3Client.getUrl(bucket, fileName).toString());
     }
 
-    public String parseFileName(String imgUrl) {
-        String[] st = imgUrl.split("/");
+    public String parseFileName(String url) {
+        String[] st = url.split("/");
         return st[st.length - 1];
     }
 }
