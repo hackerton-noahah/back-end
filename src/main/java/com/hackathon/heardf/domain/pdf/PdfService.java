@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import javax.mail.MessagingException;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileUtils;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +51,7 @@ public class PdfService {
         pdfRepository.save(pdf);
     }
 
-    public void makePdfToText(PdfToText pdfToText) throws IOException, ApiException {
+    public void makePdfToText(PdfToText pdfToText) throws IOException, ApiException, MessagingException {
         Pdf pdf = pdfRepository.findById(pdfToText.getId()).orElse(null);
         if(pdf == null) throw new RuntimeException("ID에 해당하는 PDF를 찾을 수 없음");
 
@@ -65,7 +66,7 @@ public class PdfService {
         return new TextResult("임시 내용");
     }
 
-    public void useApi(String pdfName) throws IOException, ApiException {
+    public void useApi(String pdfName) throws IOException, MessagingException, ApiException {
         ApiClient apiClient = new ApiClient(clientId, clientSecret, null);
         WordsApi wordsApi = new WordsApi(apiClient);
         log.info("1. client 생성 성공");

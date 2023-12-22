@@ -6,8 +6,10 @@ import com.hackathon.heardf.domain.pdf.dto.PdfRequestDto.PdfToText;
 import com.hackathon.heardf.domain.pdf.dto.PdfRequestDto.RegisterPdf;
 import com.hackathon.heardf.domain.pdf.dto.PdfResponseDto.TextResult;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.persistence.criteria.CriteriaBuilder.In;
 import jakarta.validation.Valid;
 import java.io.IOException;
+import javax.mail.MessagingException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,15 @@ public class PdfController {
     private final PdfService pdfService;
 
     /**
+     * [GET] test API
+     */
+    @Operation(summary = "test API")
+    @GetMapping("/test")
+    public ResponseEntity<Integer> test() {
+        return ResponseEntity.ok(200);
+    }
+
+    /**
      * [POST] PDF 등록
      */
     @Operation(summary = "PDF 등록")
@@ -38,7 +49,8 @@ public class PdfController {
      */
     @Operation(summary = "PDF -> TEXT 변환하기")
     @PostMapping("/pdfs/text")
-    public ResponseEntity<Integer> makePdfToText(@RequestBody PdfToText pdfToText) throws IOException, ApiException {
+    public ResponseEntity<Integer> makePdfToText(@RequestBody PdfToText pdfToText)
+            throws IOException, ApiException, MessagingException {
         pdfService.makePdfToText(pdfToText);
         return ResponseEntity.ok(200);
     }
