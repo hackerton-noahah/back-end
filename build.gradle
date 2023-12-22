@@ -40,6 +40,9 @@ dependencies {
 	// mail
 	implementation 'javax.mail:javax.mail-api:1.6.2'
 
+	// ai
+	implementation 'io.github.flashvayne:chatgpt-spring-boot-starter:1.0.4'
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'

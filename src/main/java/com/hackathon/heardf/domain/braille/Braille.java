@@ -21,4 +21,9 @@ public class Braille {
     private String plain;
 
     private String result;
+
+    public Braille(String text, String braille) {
+        this.plain = text;
+        this.result = braille;
+    }
 }
